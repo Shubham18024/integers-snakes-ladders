@@ -2,7 +2,7 @@ export const AVATARS = ['🦊', '🐱', '🐼', '🐶', '🐸', '🐰', '🐯', 
 export const AI_AVATAR = '🤖';
 export const MAX_PLAYERS = 5;
 
-export const GITHUB_PROFILE = 'https://github.com/Shubham18024';
+export const GITHUB_PROFILE = 'https://github.com/Shubham18024/integers-snakes-ladders';
 export const TIMER_OPTIONS = [15, 30, 45, 60, 90];
 
 export const THEMES = {
