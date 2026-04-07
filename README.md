@@ -14,6 +14,18 @@ Instead of just solving problems on paper, this game lets students *experience* 
 
 ---
 
+## 🧰 Tech Stack
+
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="TailwindCSS" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/Web%20Audio%20API-8E44AD?style=for-the-badge&logo=musicbrainz&logoColor=white" alt="Web Audio API" />
+</p>
+
+---
+
 ## 🧠 What this teaches
 
 - Positive and negative integers
@@ -34,21 +46,8 @@ Instead of just solving problems on paper, this game lets students *experience* 
 
 ---
 
-## 🧰 Tech Stack
-
-<p align="center">
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
-  <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="TailwindCSS" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/Web%20Audio%20API-8E44AD?style=for-the-badge&logo=musicbrainz&logoColor=white" alt="Web Audio API" />
-</p>
-
----
-
 ## 📬 Contact
 
-- GitHub: [Shubham18024/integers-snakes-ladders](https://github.com/Shubham18024/integers-snakes-ladders)
 - Email: [vaibhav.tiwari84478@gmail.com](mailto:vaibhav.tiwari84478@gmail.com)
 
 ---
