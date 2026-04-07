@@ -1,50 +1,107 @@
 # Integers: Snakes & Ladders
 
-A modern React + Vite educational game to teach integers with fun themes, multiplayer, and AI mode.
+An interactive game built to help students understand **integers** in a fun way.
 
-## Local development
+This project is inspired by **Class 6 NCERT Maths — Chapter 10: *The Other Side of Zero***.
+
+Instead of just solving problems on paper, this game lets students *experience* positive and negative numbers through movement on a board.
+
+---
+
+## 🎮 Play the Game
+
+👉 [https://anchorapp.me/integers-snakes-ladders/](https://anchorapp.me/integers-snakes-ladders/)
+
+---
+
+## 🧠 What this teaches
+
+- Positive and negative integers
+- Movement on number line
+- Addition and subtraction using gameplay
+- Intuition behind "going below zero"
+
+---
+
+## ✨ Features
+
+- Multiplayer mode (2 to 5 players)
+- Vs AI mode
+- Easy / Hard / Timer modes
+- Interactive integer learning page for kids
+- Rich themes, sound effects, and game animations
+- Share-ready winner flow
+
+---
+
+## 🖼️ Reference (NCERT)
+
+![NCERT Reference](ncert.png)
+
+---
+
+## 🕹️ Gameplay Preview
+
+![Game Screenshot](game_play.png)
+
+---
+
+## 🚀 Run Locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Production build
+---
+
+## 🏗️ Build
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Share URL config
+---
 
-Winner share uses this env variable if provided:
+## 🌍 Deploy
 
-```bash
-VITE_PUBLIC_APP_URL=https://anchorapp.me/integers-snakes-ladders/
-```
-
-If not set, default is `https://anchorapp.me/integers-snakes-ladders/`.
-
-## Deploy to GitHub Pages
-
-Current Vite base is configured for repo pages path:
-
-- `/integers-snakes-ladders/`
-
-Deploy command:
+For GitHub Pages deploy:
 
 ```bash
 npm run deploy
 ```
 
-Then in GitHub repo settings:
+If your public URL changes, set:
 
-- Pages -> Deploy from branch
-- Branch: `gh-pages`
-- Folder: `/ (root)`
+```bash
+VITE_PUBLIC_APP_URL=https://your-domain.example/path/
+```
 
-## Notes
+Current production URL:
 
-- For a custom domain, configure DNS and add a `CNAME` file in `public/`.
-- For external hosting (like `anchorapp.me`), keep `VITE_PUBLIC_APP_URL` set to your live URL.
+- `https://anchorapp.me/integers-snakes-ladders/`
+
+---
+
+## 🤝 Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Main contribution ideas:
+
+- Add more themes
+- Add more educational mini-lessons
+- Add more sound packs and accessibility improvements
+
+---
+
+## ⭐ Support
+
+If you like this project, consider **starring the repo** — it helps a lot.
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
