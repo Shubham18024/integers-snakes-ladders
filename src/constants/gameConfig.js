@@ -106,6 +106,42 @@ export const THEMES = {
     obstacleName: 'Dark Alley',
     boostName: 'Neon Boost',
   },
+  magic: {
+    name: 'Wizard School',
+    bg: 'from-purple-900 via-indigo-950 to-black',
+    boardColors: { pos: 'from-violet-500/30 to-purple-600/30', neg: 'from-slate-800/40 to-slate-900/40' },
+    obstacle: '🦇',
+    boost: '🧹',
+    obstacleName: 'Dark Curse',
+    boostName: 'Broom Flight',
+  },
+  pirate: {
+    name: 'Pirate Cove',
+    bg: 'from-teal-900 via-emerald-950 to-black',
+    boardColors: { pos: 'from-amber-400/20 to-yellow-600/20', neg: 'from-cyan-800/20 to-blue-900/20' },
+    obstacle: '⚓',
+    boost: '🗺️',
+    obstacleName: 'Heavy Anchor',
+    boostName: 'Treasure Map',
+  },
+  ninja: {
+    name: 'Ninja Dojo',
+    bg: 'from-stone-800 via-zinc-900 to-black',
+    boardColors: { pos: 'from-red-600/20 to-rose-800/20', neg: 'from-stone-600/20 to-zinc-800/20' },
+    obstacle: '🕸️',
+    boost: '🗡️',
+    obstacleName: 'Shadow Trap',
+    boostName: 'Swift Blade',
+  },
+  farm: {
+    name: 'Farm Life',
+    bg: 'from-green-900 via-lime-900 to-amber-950',
+    boardColors: { pos: 'from-green-500/20 to-lime-600/20', neg: 'from-orange-800/20 to-amber-900/20' },
+    obstacle: '🐷',
+    boost: '🐎',
+    obstacleName: 'Mud Puddle',
+    boostName: 'Fast Horse',
+  },
 };
 
 export const LADDERS = [

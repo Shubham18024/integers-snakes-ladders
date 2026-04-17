@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Brain, Monitor, Star, User, Users, X, Github, Heart } from 'lucide-react';
+import { Brain, Monitor, Star, User, Users, X, Github, Heart, ChevronLeft, ChevronRight, LayoutGrid, List, Info, ArrowRight, Check } from 'lucide-react';
 import { AVATARS, GITHUB_REPO, GITHUB_USER_PROFILE, THEMES, TIMER_OPTIONS } from '../constants/gameConfig';
 import { playClick, playBirdChirp } from '../utils/sfx';
 import Footer from './Footer';
@@ -23,15 +23,73 @@ export default function SetupScreen({
   const [tab, setTab] = useState('play');
   const [showPopup, setShowPopup] = useState(false);
   const [isPopupExpanded, setIsPopupExpanded] = useState(false);
+  const [showAllThemes, setShowAllThemes] = useState(false);
+  const [showGuideBubble, setShowGuideBubble] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
 
   useEffect(() => {
+    // Bird popup timer
     const timer = setTimeout(() => {
       setShowPopup(true);
       playBirdChirp();
     }, 1500);
 
-    return () => clearTimeout(timer);
+    // Guide popup timer (Trigger ONLY if they haven't seen it)
+    const guideTimer = setTimeout(() => {
+      try {
+        if (!sessionStorage.getItem('hasSeenSetupGuide')) {
+          setShowGuideBubble(true);
+        }
+      } catch (e) {
+        // Fallback for secure iframes
+        setShowGuideBubble(true);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(guideTimer);
+    };
   }, []);
+
+  const highlightClass = (step) => tutorialStep === step ? 'relative z-[110] ring-4 ring-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.6)] bg-slate-800 scale-[1.02] transition-all my-6' : 'relative';
+
+  const GuideTooltip = ({ step, icon, title, text, pos = 'bottom' }) => {
+    if (tutorialStep !== step) return null;
+    return (
+      <div className={`absolute left-1/2 -translate-x-1/2 z-[120] w-[90vw] max-w-[320px] rounded-2xl border-2 border-yellow-400/80 bg-slate-900 p-4 text-center text-white shadow-2xl animate-in fade-in duration-300 ${pos === 'bottom' ? 'top-full mt-4 slide-in-from-top-2' : 'bottom-full mb-4 slide-in-from-bottom-2'}`}>
+         <div className={`absolute left-1/2 -translate-x-1/2 border-x-[10px] border-x-transparent ${pos === 'bottom' ? '-top-[10px] border-b-[10px] border-b-yellow-400' : '-bottom-[10px] border-t-[10px] border-t-yellow-400'}`}></div>
+         <div className="mb-2 text-4xl drop-shadow-md">{icon}</div>
+         <h3 className="mb-1 text-lg font-black text-yellow-300">{title}</h3>
+         <p className="mb-4 text-sm font-medium leading-relaxed text-slate-200">{text}</p>
+         
+         <div className="flex items-center justify-between">
+             <div className="flex gap-1.5 opacity-80">
+               {[1,2,3,4,5,6].map(dot => (
+                 <div key={dot} className={`h-1.5 rounded-full transition-all duration-300 ${tutorialStep === dot ? 'bg-yellow-400 w-5' : 'bg-slate-700 w-1.5'}`} />
+               ))}
+             </div>
+             
+             <button 
+               onClick={(e) => {
+                 e.stopPropagation();
+                 playClick();
+                 if (tutorialStep < 6) {
+                   setTutorialStep(tutorialStep + 1);
+                 } else {
+                   setTutorialStep(0);
+                   setShowGuideBubble(false);
+                   try { sessionStorage.setItem('hasSeenSetupGuide', 'true'); } catch(e){}
+                 }
+               }}
+               className="flex items-center gap-1.5 rounded-lg bg-yellow-500 px-4 py-2 text-sm font-bold text-slate-900 shadow hover:bg-yellow-400 active:scale-95 transition-all"
+             >
+               {tutorialStep < 6 ? <>Next <ArrowRight size={16} /></> : <>Got It! <Check size={16} /></>}
+             </button>
+         </div>
+      </div>
+    );
+  };
 
   return (
     <div className={`flex min-h-screen flex-col bg-gradient-to-br ${t.bg} transition-colors duration-1000`}>
@@ -42,7 +100,7 @@ export default function SetupScreen({
             <p className="text-sm font-bold uppercase tracking-widest text-slate-200 sm:text-base">Play • Learn • Share</p>
           </div>
 
-          <div className="mb-6 grid grid-cols-2 gap-2 rounded-2xl bg-black/25 p-2">
+          <div className={`mb-6 grid grid-cols-2 gap-2 rounded-2xl bg-black/25 p-2 transition-all ${highlightClass(1)}`}>
             <button
               type="button"
               onClick={() => setTab('play')}
@@ -57,6 +115,7 @@ export default function SetupScreen({
             >
               Learn Integers
             </button>
+            <GuideTooltip step={1} icon="🕹️" title="Start Here" text="Select Learn Integers for instructions or Play Game to start the adventure!" />
           </div>
 
           {tab === 'learn' ? (
@@ -90,7 +149,7 @@ export default function SetupScreen({
               <p className="mb-4 text-center text-sm font-semibold text-yellow-100">🎉 Many kids have already played this game, now it&apos;s your turn!</p>
               <a className="star-cta mb-6 block w-full rounded-2xl bg-yellow-300/95 px-4 py-3 text-center text-sm font-black text-slate-900 hover:bg-yellow-200" href={GITHUB_REPO} target="_blank" rel="noreferrer">⭐ Star this project on GitHub</a>
 
-              <div className="mb-5 rounded-2xl border border-white/10 bg-black/25 p-3">
+              <div className={`mb-5 rounded-2xl border border-white/10 bg-black/25 p-3 transition-all ${highlightClass(2)}`}>
                 <p className="mb-2 text-xs font-bold uppercase tracking-widest text-slate-300">Game Mode</p>
                 <div className="grid grid-cols-2 gap-2">
                   <button type="button" onClick={() => { playClick(); setIsVsAI(false); }} className={`rounded-xl py-2 text-sm font-bold ${!isVsAI ? 'bg-indigo-500 text-white' : 'bg-white/10 text-slate-300 hover:bg-white/20'}`}>
@@ -110,9 +169,10 @@ export default function SetupScreen({
                     </div>
                   </div>
                 )}
+                <GuideTooltip step={2} icon="👥" title="Who is Playing?" text="Play locally with up to 5 friends, or battle our smart AI bot!" />
               </div>
 
-              <div className="mb-5 rounded-2xl border border-white/10 bg-black/25 p-3">
+              <div className={`mb-5 rounded-2xl border border-white/10 bg-black/25 p-3 transition-all ${highlightClass(3)}`}>
                 <p className="mb-2 text-xs font-bold uppercase tracking-widest text-slate-300">Difficulty</p>
                 <div className="grid grid-cols-3 gap-2">
                   <button type="button" onClick={() => { playClick(); setDifficulty('easy'); }} className={`rounded-xl py-2 text-sm font-bold ${difficulty === 'easy' ? 'bg-green-500 text-white' : 'bg-white/10 text-slate-300 hover:bg-white/20'}`}><Star className="mr-1 inline" size={16} />Easy</button>
@@ -126,38 +186,98 @@ export default function SetupScreen({
                     ))}
                   </div>
                 )}
+                <GuideTooltip step={3} icon="🧠" title="Pick Your Challenge" text="Play on Easy, Hard, or race against the clock in Timer Mode." />
               </div>
 
-              <div className="mb-5">
-                <p className="mb-2 text-xs font-bold uppercase tracking-widest text-slate-300">Choose Theme</p>
-                <div className="flex flex-wrap gap-2">
-                  {Object.entries(THEMES).map(([key, theme]) => (
-                    <button key={key} type="button" onClick={() => { playClick(); setActiveTheme(key); }} className={`rounded-xl border-2 px-3 py-1.5 text-sm font-bold ${activeTheme === key ? 'border-indigo-400 bg-indigo-500/50' : 'border-white/15 bg-white/10 hover:bg-white/20'}`}>
-                      {theme.obstacle} {theme.name}
-                    </button>
-                  ))}
+              <div className={`mb-5 transition-all rounded-xl ${highlightClass(4)}`}>
+                <div className="mb-2 flex items-center justify-between">
+                  <p className="text-xs font-bold uppercase tracking-widest text-slate-300">Choose Theme</p>
+                  <button 
+                    type="button" 
+                    onClick={() => { playClick(); setShowAllThemes(!showAllThemes); }}
+                    className="flex items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-2 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-indigo-300 transition-colors hover:bg-indigo-500/20 active:scale-95"
+                  >
+                    {showAllThemes ? <List size={14} /> : <LayoutGrid size={14} />}
+                    {showAllThemes ? 'Compact View' : 'See All'}
+                  </button>
                 </div>
+                
+                {showAllThemes ? (
+                  <div className="flex flex-wrap gap-2 animate-in fade-in zoom-in-95 duration-300">
+                    {Object.entries(THEMES).map(([key, theme]) => (
+                      <button 
+                        key={key} 
+                        type="button" 
+                        onClick={() => { playClick(); setActiveTheme(key); setShowAllThemes(false); }} 
+                        className={`rounded-xl border-2 px-3 py-1.5 text-sm font-bold transition-all ${
+                          activeTheme === key 
+                          ? 'border-indigo-400 bg-indigo-500/60 shadow-[0_0_15px_rgba(99,102,241,0.5)]' 
+                          : 'border-white/10 bg-black/40 hover:bg-white/10 hover:border-white/20 active:scale-95'
+                        }`}
+                      >
+                        {theme.obstacle} {theme.name}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between rounded-xl border-2 border-indigo-500/20 bg-black/40 p-1 shadow-inner sm:p-2 animate-in fade-in zoom-in-95 duration-300">
+                    <button type="button" onClick={() => { 
+                      playClick(); 
+                      const keys = Object.keys(THEMES);
+                      const idx = keys.indexOf(activeTheme);
+                      const nextIdx = idx === 0 ? keys.length - 1 : idx - 1;
+                      setActiveTheme(keys[nextIdx]);
+                    }} className="rounded-lg p-2 sm:p-3 hover:bg-white/10 text-indigo-300 active:scale-95 transition-all">
+                      <ChevronLeft size={20} />
+                    </button>
+                    
+                    <div className="flex flex-1 items-center justify-center gap-2 px-2 text-center text-lg sm:text-xl font-black text-indigo-50">
+                       <span className="text-2xl drop-shadow-md">{t.obstacle}</span>
+                       <span>{t.name}</span>
+                    </div>
+
+                    <button type="button" onClick={() => { 
+                      playClick(); 
+                      const keys = Object.keys(THEMES);
+                      const idx = keys.indexOf(activeTheme);
+                      const nextIdx = (idx + 1) % keys.length;
+                      setActiveTheme(keys[nextIdx]);
+                    }} className="rounded-lg p-2 sm:p-3 hover:bg-white/10 text-indigo-300 active:scale-95 transition-all">
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                )}
+                <GuideTooltip step={4} icon="🌌" title="Explore the Worlds" text="Click 'See All' to explore 15 beautiful themes that completely change the board!" />
               </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 transition-all rounded-2xl p-1 ${highlightClass(5)}`}>
                 {players.slice(0, isVsAI ? 1 : playerCount).map((player, pIdx) => (
                   <div key={pIdx} className="rounded-2xl border border-white/10 bg-black/20 p-4">
                     <h3 className="mb-2 flex items-center gap-2 font-bold text-yellow-300"><User size={16} /> Player {pIdx + 1}</h3>
-                    <input type="text" value={player.name} onChange={(e) => { const next = [...players]; next[pIdx] = { ...next[pIdx], name: e.target.value }; setPlayers(next); }} className="mb-3 w-full rounded-lg border border-white/20 bg-white/5 p-2 text-sm text-white" />
+                    <input type="text" value={player.name} onChange={(e) => { const next = [...players]; next[pIdx] = { ...next[pIdx], name: e.target.value }; setPlayers(next); }} className={`mb-3 w-full rounded-lg border border-white/20 bg-white/5 p-2 text-sm text-white ${tutorialStep === 5 ? 'ring-2 ring-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] transition-all' : ''}`} />
                     <div className="flex flex-wrap gap-1">
-                      {AVATARS.map((emoji) => (
-                        <button key={emoji} type="button" onClick={() => { playClick(); const next = [...players]; next[pIdx] = { ...next[pIdx], avatar: emoji }; setPlayers(next); }} className={`rounded-lg p-1.5 text-lg ${players[pIdx]?.avatar === emoji ? 'bg-indigo-500/40' : 'bg-white/5 hover:bg-white/20'}`}>
+                      {AVATARS.map((emoji, eIdx) => (
+                        <button 
+                         key={emoji} 
+                         type="button" 
+                         onClick={() => { playClick(); const next = [...players]; next[pIdx] = { ...next[pIdx], avatar: emoji }; setPlayers(next); }} 
+                         className={`rounded-lg p-1.5 text-lg transition-all ${players[pIdx]?.avatar === emoji ? 'bg-indigo-500/40' : 'bg-white/5 hover:bg-white/20'} ${tutorialStep === 5 ? `animate-bounce shadow-lg ring-1 ring-yellow-400 bg-slate-800 delay-${eIdx*100}` : ''}`}
+                        >
                           {emoji}
                         </button>
                       ))}
                     </div>
                   </div>
                 ))}
+                <GuideTooltip step={5} icon="✨" title="Customize Character" text="Type your unique name and tap your favorite Emoji!" pos="top" />
               </div>
 
-              <button type="button" onClick={startGame} className="mt-6 w-full rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 py-4 text-lg font-black tracking-wider text-white shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:from-indigo-400 hover:to-purple-500">
-                START EXPLORING
-              </button>
+              <div className={`mt-6 transition-all ${highlightClass(6)}`}>
+                <button type="button" onClick={startGame} className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 py-4 text-lg font-black tracking-wider text-white shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:from-indigo-400 hover:to-purple-500">
+                  START EXPLORING
+                </button>
+                <GuideTooltip step={6} icon="🚀" title="Off You Go!" text="Click this button right now to play!" pos="top" />
+              </div>
             </>
           )}
         </div>
@@ -222,6 +342,23 @@ export default function SetupScreen({
           </div>
         </div>
       )}
+
+      {/* Guide Notification Bubble */}
+      {showGuideBubble && tutorialStep === 0 && (
+        <button 
+          type="button"
+          onClick={() => { playClick(); setTab('play'); setTutorialStep(1); }}
+          className="fixed top-6 right-6 sm:top-8 sm:right-8 z-[90] flex h-12 w-12 sm:h-14 sm:w-14 animate-bounce items-center justify-center rounded-full bg-blue-500 shadow-[0_10px_25px_rgba(59,130,246,0.6)] hover:bg-blue-400 active:scale-95 transition-all animate-in zoom-in duration-500"
+        >
+          <Info size={24} className="text-white drop-shadow" />
+          <span className="absolute top-0 right-0 flex h-3 w-3 sm:h-4 sm:w-4">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
+            <span className="relative inline-flex h-full w-full rounded-full bg-yellow-500 border-2 border-blue-500"></span>
+          </span>
+        </button>
+      )}
+
+      {/* No transparent dimmer overlay, prevents z-index click blocking */}
 
       <Footer />
     </div>
