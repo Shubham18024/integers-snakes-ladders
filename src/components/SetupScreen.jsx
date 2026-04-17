@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Brain, Monitor, Star, User, Users } from 'lucide-react';
-import { AVATARS, GITHUB_PROFILE, THEMES, TIMER_OPTIONS } from '../constants/gameConfig';
-import { playClick } from '../utils/sfx';
+import { useState, useEffect } from 'react';
+import { Brain, Monitor, Star, User, Users, X, Github, Heart } from 'lucide-react';
+import { AVATARS, GITHUB_REPO, GITHUB_USER_PROFILE, THEMES, TIMER_OPTIONS } from '../constants/gameConfig';
+import { playClick, playBirdChirp } from '../utils/sfx';
 import Footer from './Footer';
 
 export default function SetupScreen({
@@ -21,6 +21,17 @@ export default function SetupScreen({
 }) {
   const t = THEMES[activeTheme];
   const [tab, setTab] = useState('play');
+  const [showPopup, setShowPopup] = useState(false);
+  const [isPopupExpanded, setIsPopupExpanded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPopup(true);
+      playBirdChirp();
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className={`flex min-h-screen flex-col bg-gradient-to-br ${t.bg} transition-colors duration-1000`}>
@@ -77,7 +88,7 @@ export default function SetupScreen({
           ) : (
             <>
               <p className="mb-4 text-center text-sm font-semibold text-yellow-100">🎉 Many kids have already played this game, now it&apos;s your turn!</p>
-              <a className="star-cta mb-6 block w-full rounded-2xl bg-yellow-300/95 px-4 py-3 text-center text-sm font-black text-slate-900 hover:bg-yellow-200" href={GITHUB_PROFILE} target="_blank" rel="noreferrer">⭐ Star this project on GitHub</a>
+              <a className="star-cta mb-6 block w-full rounded-2xl bg-yellow-300/95 px-4 py-3 text-center text-sm font-black text-slate-900 hover:bg-yellow-200" href={GITHUB_REPO} target="_blank" rel="noreferrer">⭐ Star this project on GitHub</a>
 
               <div className="mb-5 rounded-2xl border border-white/10 bg-black/25 p-3">
                 <p className="mb-2 text-xs font-bold uppercase tracking-widest text-slate-300">Game Mode</p>
@@ -151,6 +162,67 @@ export default function SetupScreen({
           )}
         </div>
       </div>
+
+      {showPopup && !isPopupExpanded && (
+        <button 
+          type="button"
+          onClick={() => { playClick(); setIsPopupExpanded(true); }}
+          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[90] flex h-14 w-14 sm:h-16 sm:w-16 animate-bounce items-center justify-center rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 shadow-[0_10px_30px_rgba(99,102,241,0.6)] hover:scale-105 active:scale-95 transition-transform animate-in zoom-in duration-500"
+        >
+          <span className="text-2xl sm:text-3xl">🐦</span>
+          <span className="absolute top-0 right-0 flex h-4 w-4 sm:h-5 sm:w-5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-pink-400 opacity-75"></span>
+            <span className="relative inline-flex h-full w-full rounded-full bg-pink-500 border-2 border-indigo-600"></span>
+          </span>
+        </button>
+      )}
+
+      {showPopup && isPopupExpanded && (
+        <div className={`fixed bottom-4 left-1/2 w-[92vw] max-w-[360px] -translate-x-1/2 sm:bottom-8 sm:left-auto sm:right-8 sm:w-80 sm:translate-x-0 z-[90] rounded-2xl sm:rounded-3xl border-2 border-indigo-400/80 bg-slate-900/95 p-3 sm:p-5 text-white shadow-[0_20px_50px_rgba(99,102,241,0.5)] backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 duration-500`}>
+          <button 
+            type="button" 
+            onClick={() => { playClick(); setShowPopup(false); }}
+            className="absolute top-2 right-2 sm:top-3 sm:right-3 rounded-full p-1 text-slate-400 shadow-sm transition-colors hover:bg-white/10 hover:text-white active:scale-95"
+          >
+            <X size={16} />
+          </button>
+          
+          <div className="mb-2 sm:mb-3 flex items-center gap-2 sm:gap-3">
+            <div className="flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-indigo-400/50 sm:border-2 bg-indigo-500/20 shadow-lg backdrop-blur-md">
+              <span className="text-sm sm:text-2xl">🐦</span>
+            </div>
+            <h3 className="text-base sm:text-xl font-black bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 bg-clip-text text-transparent flex items-center gap-1.5 sm:gap-2">
+              Hi! 👋
+            </h3>
+          </div>
+          
+          <p className="mb-3 sm:mb-5 text-xs sm:text-sm font-medium leading-tight sm:leading-relaxed text-slate-200">
+            Having a blast with integers? 🎮 <br className="hidden sm:block"/> Let's connect! Hit the links to <strong className="text-pink-300">Follow me on GitHub</strong> and drop a ⭐ on this repo!
+          </p>
+
+          <div className="flex flex-col gap-1.5 sm:gap-2">
+            <a 
+              href={GITHUB_USER_PROFILE}
+              target="_blank" 
+              rel="noreferrer"
+              onClick={() => { playClick(); setShowPopup(false); }}
+              className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl bg-indigo-600 py-2 sm:py-2.5 text-xs sm:text-sm font-bold shadow hover:bg-indigo-500 active:scale-95"
+            >
+              <Heart size={14} className="text-pink-300" /> Follow Shubham!
+            </a>
+            <a 
+              href={GITHUB_REPO}
+              target="_blank" 
+              rel="noreferrer"
+              onClick={() => { playClick(); setShowPopup(false); }}
+              className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border border-yellow-500/50 bg-yellow-500/20 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-yellow-300 shadow hover:bg-yellow-500/30 active:scale-95"
+            >
+              <Star size={14} /> Star Project
+            </a>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

@@ -109,6 +109,36 @@ export const playWin = () => {
   });
 };
 
+export const playBirdChirp = () => {
+  const chirp = () => {
+    try {
+      const { ctx, gain: master } = getAudioGraph();
+      if (ctx.state === 'suspended') ctx.resume();
+      if (activeVoices >= MAX_VOICES) return;
+      activeVoices += 1;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(2000, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(3200, ctx.currentTime + 0.1);
+      g.gain.setValueAtTime(0, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+      osc.connect(g);
+      g.connect(master);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.1);
+      osc.onended = () => {
+        activeVoices = Math.max(0, activeVoices - 1);
+      };
+    } catch {
+      /* ignore */
+    }
+  };
+  chirp();
+  setTimeout(chirp, 150);
+};
+
 export function initAudio() {
   try {
     const { ctx } = getAudioGraph();
