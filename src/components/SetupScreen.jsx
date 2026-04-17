@@ -4,6 +4,8 @@ import { AVATARS, GITHUB_REPO, GITHUB_USER_PROFILE, THEMES, TIMER_OPTIONS } from
 import { playClick, playBirdChirp } from '../utils/sfx';
 import Footer from './Footer';
 
+let hasSeenGuideThisInstance = false;
+
 export default function SetupScreen({
   activeTheme,
   setActiveTheme,
@@ -34,14 +36,9 @@ export default function SetupScreen({
       playBirdChirp();
     }, 1500);
 
-    // Guide popup timer (Trigger ONLY if they haven't seen it)
+    // Guide popup timer (Trigger on refresh, but suppress on soft restarts)
     const guideTimer = setTimeout(() => {
-      try {
-        if (!sessionStorage.getItem('hasSeenSetupGuide')) {
-          setShowGuideBubble(true);
-        }
-      } catch (e) {
-        // Fallback for secure iframes
+      if (!hasSeenGuideThisInstance) {
         setShowGuideBubble(true);
       }
     }, 500);
@@ -79,7 +76,7 @@ export default function SetupScreen({
                  } else {
                    setTutorialStep(0);
                    setShowGuideBubble(false);
-                   try { sessionStorage.setItem('hasSeenSetupGuide', 'true'); } catch(e){}
+                   hasSeenGuideThisInstance = true;
                  }
                }}
                className="flex items-center gap-1.5 rounded-lg bg-yellow-500 px-4 py-2 text-sm font-bold text-slate-900 shadow hover:bg-yellow-400 active:scale-95 transition-all"

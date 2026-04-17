@@ -1,4 +1,4 @@
-export const AVATARS = ['🦊', '🐱', '🐼', '🐶', '🐸', '🐰', '🐯', '🦁', '🦄', '🐲'];
+export const AVATARS = ['🦊', '🐱', '🐼', '🐶', '🐸', '🐰', '🐯', '🦁', '🦄', '🐲', '🥷', '👽', '🤠', '😎'];
 export const AI_AVATAR = '🤖';
 export const MAX_PLAYERS = 5;
 
